@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\703040\Documents\Personal\resume\greenShieldCanada\NasaApi\NasaApi\Controllers\NasaAstroPicController.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using NasaApi.Exceptions;
+using NasaApi.Models;
+using NasaApi.Models.DTOs;
+using NasaApi.Services;
+using NasaApi.Storage;
+using Newtonsoft.Json;
+
+namespace NasaApi.Controllers
+{
+    [Route(&quot;api/[controller]&quot;)]
+    [ApiController]
+    public class NasaAstroPicController : ControllerBase
+    {
+        private readonly INasaPicFetchingService _nasaPicFetchingService;
+        private readonly ILogger _logger;
+
+
+        public NasaAstroPicController(INasaPicFetchingService nasaPicFetchingService, ILogger&lt;NasaAstroPicController&gt; logger)
+        {
+            _nasaPicFetchingService = nasaPicFetchingService;
+            _logger = logger;
+        }
+
+        // GET: api/NasaAstroPic
+        [HttpGet]
+        public async Task&lt;IActionResult&gt; GetNasaAstroPicModel(string date)
+        {
+            _logger.Log(LogLevel.Information,&quot;Getting the NASA image&quot;);
+            try
+            {
+                var response = await _nasaPicFetchingService.GetPicOfTheDay(date);
+                return Ok(response);
+            }
+            catch (NasaApiResponseException exception)
+            {
+                return BadRequest(exception.ToJsonString());
+            }
+
+            
+
+        }
+
+
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[27,9,27,126,1],[28,9,28,10,1],[29,13,29,62,1],[30,13,30,30,1],[31,9,31,10,1],[36,9,36,10,1],[37,13,37,72,1],[39,13,39,14,1],[40,17,40,83,1],[41,17,41,37,1],[43,13,43,55,1],[44,13,44,14,1],[45,17,45,61,1],[50,9,50,10,1]]);
+    </script>
+  </body>
+</html>

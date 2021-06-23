@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\703040\Documents\Personal\resume\greenShieldCanada\NasaApi\NasaApiTest\Controllers\NasaAstroPicControllerTest.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
+using NasaApi.Controllers;
+using NasaApi.Models.DTOs;
+using NasaApi.Services.Impl;
+using NasaApi.Storage;
+using NasaApiTest.Util;
+using Xunit;
+
+namespace NasaApiTest.Controllers
+{
+    public class NasaAstroPicControllerTest
+    {
+        [Fact]
+        public async Task ReturnsOkResponseWithApiData()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder&lt;NasaApiDbContext&gt;();
+            optionsBuilder.UseInMemoryDatabase(&quot;dbNasaApiPictures&quot;);
+            var dbContext = new NasaApiDbContext(optionsBuilder.Options);
+            var clientFactory = HttpClientMock.NasaApiHTTPClientFactory(NasaApiResponseBuilder.OkResponse, HttpStatusCode.OK);
+
+            var config = new ConfigurationBuilder().AddJsonFile(&quot;appsettings.json&quot;).Build();
+
+
+            var service = new NasaPicFetchingService(dbContext, clientFactory, config);
+
+            var systemUnderTest = new NasaAstroPicController(service, new NullLogger&lt;NasaAstroPicController&gt;());
+
+            var result = await systemUnderTest.GetNasaAstroPicModel(&quot;&quot;) as OkObjectResult;
+
+            Assert.IsType&lt;ResponseDTO&gt; (result.Value);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task ReturnsOkResponseWithCachedApiData()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder&lt;NasaApiDbContext&gt;();
+            optionsBuilder.UseInMemoryDatabase(&quot;dbNasaApiPictures&quot;);
+            var dbContext = new NasaApiDbContext(optionsBuilder.Options);
+            var clientFactory = HttpClientMock.NasaApiHTTPClientFactory(NasaApiResponseBuilder.OkResponse, HttpStatusCode.OK);
+
+            var config = new ConfigurationBuilder().AddJsonFile(&quot;appsettings.json&quot;).Build();
+
+
+            var service = new NasaPicFetchingService(dbContext, clientFactory, config);
+
+            var systemUnderTest = new NasaAstroPicController(service, new NullLogger&lt;NasaAstroPicController&gt;());
+
+            var result = await systemUnderTest.GetNasaAstroPicModel(&quot;&quot;) as OkObjectResult;
+            Assert.NotNull(result.Value);
+            Assert.IsType&lt;ResponseDTO&gt;(result.Value);
+            result = await systemUnderTest.GetNasaAstroPicModel(&quot;&quot;) as OkObjectResult;
+            Assert.NotNull(result.Value);
+            Assert.IsType&lt;ResponseDTO&gt;(result.Value);
+            Assert.Equal(&quot;CachedResponse&quot;, (result.Value as ResponseDTO).Message);
+        }
+
+
+        [Fact]
+        public async Task ReturnsBadRequestWhenDateQueryParamIsInFuture()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder&lt;NasaApiDbContext&gt;();
+            optionsBuilder.UseInMemoryDatabase(&quot;dbNasaApiPictures&quot;);
+            var dbContext = new NasaApiDbContext(optionsBuilder.Options);
+            var clientFactory = HttpClientMock.NasaApiHTTPClientFactory(NasaApiResponseBuilder.BadRequestResponse,HttpStatusCode.BadRequest);
+
+            var config = new ConfigurationBuilder().AddJsonFile(&quot;appsettings.json&quot;).Build();
+
+
+            var service = new NasaPicFetchingService(dbContext, clientFactory, config);
+
+            var systemUnderTest = new NasaAstroPicController(service, new NullLogger&lt;NasaAstroPicController&gt;());
+            var result = await systemUnderTest.GetNasaAstroPicModel(DateTime.Now.AddDays(1).ToString(&quot;yyyy-MM-dd&quot;)) as ObjectResult;
+
+            Assert.Equal(400,result.StatusCode);
+
+        }
+
+        
+
+
+
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[21,9,21,10,1],[22,13,22,82,1],[23,13,23,69,1],[24,13,24,74,1],[25,13,25,127,1],[27,13,27,93,1],[30,13,30,88,1],[32,13,32,113,1],[34,13,34,91,1],[36,13,36,55,1],[37,13,37,50,1],[38,9,38,10,1],[42,9,42,10,1],[43,13,43,82,1],[44,13,44,69,1],[45,13,45,74,1],[46,13,46,127,1],[48,13,48,93,1],[51,13,51,88,1],[53,13,53,113,1],[55,13,55,91,1],[56,13,56,42,1],[57,13,57,54,1],[58,13,58,87,1],[59,13,59,42,1],[60,13,60,54,1],[61,13,61,83,1],[62,9,62,10,1],[67,9,67,10,1],[68,13,68,82,1],[69,13,69,69,1],[70,13,70,74,1],[71,13,71,142,1],[73,13,73,93,1],[76,13,76,88,1],[78,13,78,113,1],[79,13,79,133,1],[81,13,81,49,1],[83,9,83,10,1]]);
+    </script>
+  </body>
+</html>

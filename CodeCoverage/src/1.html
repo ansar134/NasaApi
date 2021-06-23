@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>C:\Users\703040\Documents\Personal\resume\greenShieldCanada\NasaApi\NasaApi\Exceptions\NasaApiResponseException.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace NasaApi.Exceptions
+{
+    public class NasaApiResponseException: Exception
+    {
+        public HttpStatusCode StatusCode { get; set; }
+
+        public string Message { get; set; }
+
+        public NasaApiResponseException(HttpStatusCode statusCode, string message):base(message)
+        {
+            StatusCode = statusCode;
+            Message = message;
+        }
+
+
+        public string ToJsonString()
+        {
+            return new JObject(new JProperty(&quot;StatusCode&quot;, StatusCode),
+                new JProperty(&quot;Message&quot;, Message)).ToString();
+        }
+    }
+}
+
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,44,14,48,1],[14,49,14,53,1],[16,33,16,37,1],[16,38,16,42,1],[18,84,18,97,1],[19,9,19,10,1],[20,13,20,37,1],[21,13,21,31,1],[22,9,22,10,1],[26,9,26,10,1],[27,13,28,63,1],[29,9,29,10,1]]);
+    </script>
+  </body>
+</html>
