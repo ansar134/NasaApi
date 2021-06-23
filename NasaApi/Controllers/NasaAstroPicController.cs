@@ -47,6 +47,7 @@ namespace NasaApi.Controllers
             }
             catch (NasaApiResponseException exception)
             {
+                // Add logging
                 _logger.Log(LogLevel.Error, "Got exception while getting the response: ",exception);
                 return BadRequest(exception.ToJsonString());
             }
