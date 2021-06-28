@@ -19,6 +19,7 @@ namespace NasaApi.Controllers
     /// <summary>
     /// This is the main controller class that gets the request and forwards them to the service
     /// to get the response back from Nasa API
+    /// This is from LH branch
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
